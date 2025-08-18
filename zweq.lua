@@ -6,6 +6,12 @@ local vec0 = Vector3.new()
 local prop1000 = PhysicalProperties.new(1000,1000,0,1000,0)
 local cf0 = CFrame.new()
 
+local Theme = {
+    Background = Color3.fromRGB(0, 0, 0),
+    Button = Color3.fromRGB(25, 25, 25),
+    Text = Color3.fromRGB(255, 255, 255)
+}
+
 local Settings = {
     ['Autofarm'] = false,
     ['AutoPunch'] = false,
@@ -17,12 +23,13 @@ local Settings = {
     ['AntiPunch'] = false,
     ['AntiFling'] = false,
     ['AntiVelocity'] = false,
-    ['LessPing'] = false
+    ['LessPing'] = false,
+    ['AutoJump'] = false
 }
 
 local mouse = plr:GetMouse()
 local rs = game:GetService'RunService'
-local pinga
+local ping
 local points
 local vim = game:GetService'VirtualInputManager'
 local LoopFlingV1 = {}
@@ -62,15 +69,16 @@ pcall(function()
         ping.Size = UDim2.new(0,150,0,25)
         ping.Position = UDim2.new(0,0,0.85,0)
         Instance.new('UICorner',ping)
-        ping.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        ping.BackgroundColor3 = Theme.Button
         ping.BackgroundTransparency = 0.7
+        ping.TextColor3 = Theme.Text
         ping.TextScaled = true
         ping.Visible = false
     end
 end)
 pcall(function()
     if game:GetService('CoreGui'):FindFirstChild('PointsGui') then
-        ping = game:GetService('CoreGui').PointsGui.p
+        points = game:GetService('CoreGui').PointsGui.p
     else
         local pointsgui = Instance.new('ScreenGui',game:GetService('CoreGui'))
         pointsgui.Name = 'PointsGui'
@@ -81,8 +89,9 @@ pcall(function()
         points.Size = UDim2.new(0,150,0,25)
         points.Position = UDim2.new(0,0,0.85,50)
         Instance.new('UICorner',points)
-        points.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        points.BackgroundColor3 = Theme.Button
         points.BackgroundTransparency = 0.7
+        points.TextColor3 = Theme.Text
         points.TextScaled = true
         points.Visible = false
     end
@@ -257,6 +266,8 @@ local function Notify(title,text,duration)
     text1.Size = UDim2.new(1,0,0,20)
     text1.Position = UDim2.new(0,0,1,22)
     text1.Text = text
+    text1.BackgroundColor3 = Theme.Button
+    text1.TextColor3 = Theme.Text
     text1.BackgroundTransparency = 0.3
     if duration and typeof(duration)=='number' then
         spawn(function()
@@ -275,47 +286,47 @@ local Holder = Instance.new('Frame')
 GUI.Name = 'GUI'
 GUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 GUI.ResetOnSpawn = false
-Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BackgroundColor3 = Theme.Background
 Frame.BackgroundTransparency = 0.500
 Frame.Position = UDim2.new(0, -200, 0.332, 0)
 Frame.Size = UDim2.new(0, 90, 0, 208)
 Frame.Visible = false
 Open.Name = "Open"
-Open.BackgroundColor3 = Color3.fromRGB(79, 79, 79)
+Open.BackgroundColor3 = Theme.Button
 Open.BackgroundTransparency = 0.300
 Open.Position = UDim2.new(0, 0, 0.599787831, 0)
 Open.Size = UDim2.new(0, 47, 0, 25)
 Open.Font = Enum.Font.SourceSansBold
 Open.Text = "Open"
-Open.TextColor3 = Color3.fromRGB(0, 0, 0)
+Open.TextColor3 = Theme.Text
 Open.TextScaled = true
 Open.TextSize = 14.000
 Open.TextWrapped = true
 Holder.Name = "Holder"
 Holder.Parent = GUI
-Holder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Holder.BackgroundColor3 = Theme.Background
 Holder.BackgroundTransparency = 1.000
 Holder.Position = UDim2.new(0, 180, 0.332, 0)
 Holder.Size = UDim2.new(0, 379, 0, 208)
 Refresh.Name = "Refresh"
 Refresh.AnchorPoint = Vector2.new(1,0)
-Refresh.BackgroundColor3 = Color3.fromRGB(163, 163, 163)
+Refresh.BackgroundColor3 = Theme.Button
 Refresh.Position = UDim2.new(1, 0, 0.332121223, 0)
 Refresh.Size = UDim2.new(0, 100, 0, 22)
 Refresh.Font = Enum.Font.SourceSans
 Refresh.Text = "Refresh"
-Refresh.TextColor3 = Color3.fromRGB(189, 0, 0)
+Refresh.TextColor3 = Theme.Text
 Refresh.TextScaled = true
 Refresh.TextSize = 14.000
 Refresh.TextWrapped = true
 Respawn.Name = "Respawn"
 Respawn.AnchorPoint = Vector2.new(1,0)
-Respawn.BackgroundColor3 = Color3.fromRGB(163, 163, 163)
+Respawn.BackgroundColor3 = Theme.Button
 Respawn.Position = UDim2.new(1, 0, 0, Refresh.AbsolutePosition.Y+28)
 Respawn.Size = UDim2.new(0, 100, 0, 22)
 Respawn.Font = Enum.Font.SourceSans
 Respawn.Text = "Respawn"
-Respawn.TextColor3 = Color3.fromRGB(189, 0, 0)
+Respawn.TextColor3 = Theme.Text
 Respawn.TextScaled = true
 Respawn.TextSize = 14.000
 Respawn.TextWrapped = true
@@ -325,7 +336,8 @@ HoverTip.Position = UDim2.new(0,0,0,0)
 HoverTip.Visible = false
 HoverTip.Text = ''
 HoverTip.ZIndex = 10
-HoverTip.BackgroundColor3 = Color3.fromRGB(140,140,140)
+HoverTip.BackgroundColor3 = Theme.Button
+HoverTip.TextColor3 = Theme.Text
 local cdFrame = false
 Open.MouseButton1Down:Connect(function()
     for _,v in next,Holder:GetChildren() do
@@ -376,19 +388,19 @@ local lpp = 0
 local function addPage(name)
     local Page = Instance.new('TextButton',Frame)
     Page.Name = name
-    Page.BackgroundColor3 = Color3.fromRGB(163, 163, 163)
+    Page.BackgroundColor3 = Theme.Button
     Page.Position = UDim2.new(0,0,0,lpp)
     Page.Size = UDim2.new(1, 0, 0, 22)
     Page.Font = Enum.Font.SourceSansSemibold
     Page.Text = name
-    Page.TextColor3 = Color3.fromRGB(0, 0, 0)
+    Page.TextColor3 = Theme.Text
     Page.TextScaled = true
     Page.TextSize = 14.000
     Page.TextWrapped = true
     lpp = lpp+28
     local PageFrame = Instance.new('Frame',Holder)
     PageFrame.Name = name
-    PageFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    PageFrame.BackgroundColor3 = Theme.Background
     PageFrame.BackgroundTransparency = 0.5
     PageFrame.Size = UDim2.new(0, 409, 0, 208)
     PageFrame.Visible = false
@@ -413,12 +425,12 @@ local function addButton(name,frame,tip)
     end
     local Button = Instance.new('TextButton',frame)
     Button.Name = name
-    Button.BackgroundColor3 = Color3.fromRGB(163, 163, 163)
+    Button.BackgroundColor3 = Theme.Button
     Button.Position = UDim2.new(0, table[frame].posX, 0, table[frame].posY)
     Button.Size = UDim2.new(0, 90, 0, 22)
     Button.Font = Enum.Font.SourceSansSemibold
     Button.Text = name
-    Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+    Button.TextColor3 = Theme.Text
     Button.TextScaled = true
     Button.TextSize = 14.000
     Button.TextWrapped = true
@@ -446,13 +458,13 @@ local function addBox(name,frame,tip)
     end
     local Box = Instance.new('TextBox',frame)
     Box.Name = name
-    Box.BackgroundColor3 = Color3.fromRGB(163, 163, 163)
+    Box.BackgroundColor3 = Theme.Button
     Box.BackgroundTransparency = 0.500
     Box.Position = UDim2.new(0, table[frame].posX, 0, table[frame].posY)
     Box.Size = UDim2.new(0, 90, 0, 22)
     Box.Font = Enum.Font.SourceSans
     Box.Text = name
-    Box.TextColor3 = Color3.fromRGB(0, 0, 0)
+    Box.TextColor3 = Theme.Text
     Box.TextSize = 14.000
     Box.MouseEnter:Connect(function()
         HoverTip.Visible = true
@@ -476,9 +488,11 @@ local version = Instance.new('TextLabel',Info)
 credits.Position = UDim2.new(0,6,0,6)
 credits.Size = UDim2.new(1,-12,0,22)
 credits.Text = 'Made by KAKOYTO_LOXX and JusttChrxs'
+credits.TextColor3 = Theme.Text
 version.Position = UDim2.new(0,6,0,34)
 version.Size = UDim2.new(1,-12,0,22)
 version.Text = 'Version: '..Version
+version.TextColor3 = Theme.Text
 
 local b = addButton('AntiFling: Off',Main,'Prevents your character from being flung')
 b.MouseButton1Down:Connect(function()
@@ -706,6 +720,16 @@ b7.MouseButton1Down:Connect(function()
             end)
         end
     end)
+end)
+
+local b_autoJump = addButton('AutoJump: Off',Main,'Automatically jump repeatedly')
+b_autoJump.MouseButton1Down:Connect(function()
+    Settings['AutoJump'] = not Settings['AutoJump']
+    if Settings['AutoJump'] then
+        b_autoJump.Text = 'AutoJump: On'
+    else
+        b_autoJump.Text = 'AutoJump: Off'
+    end
 end)
 addButton('Crash Server',Global,'Crash Server').MouseButton1Down:Connect(function()
     pcall(function()
@@ -1058,6 +1082,11 @@ spawn(function()
                     end
                 end)
             end
+        end
+        if Settings['AutoJump'] then
+            pcall(function()
+                plr.Character:FindFirstChildOfClass('Humanoid').Jump = true
+            end)
         end
     end
 end)
